@@ -1,0 +1,29 @@
+{
+  "system": "You are a helpful assistant.\n*Task* Given a text, an entity, and a list of labels, perform the following:\n1. Find out which of the labels the entity belongs to.\n2. Directly Return a JSON list containing all the labels for which the entity was determined to belong.\n3. Labels list is as follows:\n{labels_list}",
+  "example": [
+    {
+      "query": "Text: Silicon Valley heaved a sigh of relief yesterday .\nEntity: Silicon Valley",
+      "answer": "```json\n[\"/location\", \"/location/region\"]\n```"
+    },
+    {
+      "query": "Text: Co-authors David Savageau and Richard Boyer , live in Gloucester , Mass . , and Asheville , N.C. , respectively .\nEntity: N.C.",
+      "answer": "```json\n[\"/location\", \"/GPE\", \"/GPE/state_province\"]\n```"
+    },
+    {
+      "query": "Text: The family was in Allied countries during both World War I and the long period of economic strife of the 1920s .\nEntity: World War I",
+      "answer": "```json\n[\"/event\", \"/event/war\"]\n```"
+    },
+    {
+      "query": "Text: Moves to accelerate the removal of dangerous pesticides gained new impetus during this year 's Alar scare , when the EPA was harshly criticized for failing to yank the possible carcinogen , a growth regulator used to make apples redder and crunchier .\nEntity: regulator",
+      "answer": "```json\n[\"/substance\", \"/substance/chemical\"]\n```"
+    },
+    {
+      "query": "Text: It also was n't known what the impact will be on the division 's work , which includes the Navy 's Trident submarine-based missile program and the Air Force 's Strategic Defense Initiative .\nEntity: Trident",
+      "answer": "```json\n[\"/product\", \"/product/weapon\"]\n```"
+    },
+    {
+      "query": "Text: Friday , Nov. 3 , 9-11 p.m. EST , on PBS : `` Our Town . ''\nEntity: Our Town",
+      "answer": "```json\n[\"/work_of_art\", \"/work_of_art/play\"]\n```"
+    }
+  ]
+}

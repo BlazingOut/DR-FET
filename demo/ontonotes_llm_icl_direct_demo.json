@@ -1,0 +1,30 @@
+{
+  "system": "You are a helpful assistant.\n*Task* Given a text, an entity, and a list of labels, perform the following:\n1. Find out which of the labels the entity belongs to.\n2. Directly Return a JSON list containing all the labels for which the entity was determined to belong. Like: ```json\n[\"label1\", \"label2\", ...]\n```\n3. Labels list is as follows:\n/location, /location/celestial, /location/city, /location/country, /location/geography, /location/geography/body_of_water, /location/geography/island, /location/geography/mountain, /location/geograpy, /location/geograpy/island, /location/park, /location/structure, /location/structure/airport, /location/structure/government, /location/structure/hospital, /location/structure/hotel, /location/structure/restaurant, /location/structure/sports_facility, /location/structure/theater, /location/transit, /location/transit/bridge, /location/transit/railway, /location/transit/road, /organization, /organization/company, /organization/company/broadcast, /organization/company/news, /organization/education, /organization/government, /organization/military, /organization/music, /organization/political_party, /organization/sports_league, /organization/sports_team, /organization/stock_exchange, /organization/transit, /other, /other/art, /other/art/broadcast, /other/art/film, /other/art/music, /other/art/stage, /other/art/writing, /other/award, /other/body_part, /other/currency, /other/event, /other/event/accident, /other/event/election, /other/event/holiday, /other/event/natural_disaster, /other/event/protest, /other/event/sports_event, /other/event/violent_conflict, /other/food, /other/health, /other/health/malady, /other/health/treatment, /other/heritage, /other/internet, /other/language, /other/language/programming_language, /other/legal, /other/living_thing, /other/living_thing/animal, /other/product, /other/product/car, /other/product/computer, /other/product/mobile_phone, /other/product/software, /other/product/weapon, /other/religion, /other/scientific, /other/sports_and_leisure, /other/supernatural, /person, /person/artist, /person/artist/actor, /person/artist/author, /person/artist/director, /person/artist/music, /person/athlete, /person/coach, /person/doctor, /person/legal, /person/military, /person/political_figure, /person/religious_leader, /person/title",
+
+  "example": [
+    {
+      "query": "Text: Thousands of residents of low - lying areas were ordered to evacuate as the storm headed north in the Gulf of Mexico with 80 mph winds .\nEntity: the Gulf",
+      "answer": "```json\n[\"/location\", \"/location/geography\", \"/location/geography/body_of_water\"]\n```"
+    },
+    {
+      "query": "Text: Hundreds of East Germans flocked to Bonn 's Embassy in Warsaw , bringing to more than 1,200 the number of emigres expected to flee to the West beginning today .\nEntity: Bonn 's Embassy",
+      "answer": "```json\n[\"/location\", \"/location/structure\", \"/location/structure/government\"]\n```"
+    },
+    {
+      "query": "Text: The Soviet Union reported that thousands of tons of goods needed to ease widespread shortages across the nation were piled up at ports and rail depots , and food shipments were rotting because of a lack of people and equipment to move the cargo .\nEntity: ports",
+      "answer": "```json\n[\"/location\", \"/location/structure\", \"/location/transit\"]\n```"
+    },
+    {
+      "query": "Text: Moves to accelerate the removal of dangerous pesticides gained new impetus during this year 's Alar scare , when the EPA was harshly criticized for failing to yank the possible carcinogen , a growth regulator used to make apples redder and crunchier .\nEntity: nerve endings",
+      "answer": "```json\n[\"/other\", \"/other/body_part\"]\n```"
+    },
+    {
+      "query": "Text: Under the proposal , a President would have a chance twice each year to return a package of `` rescissions '' to the Hill -- once when he proposes his budget and again after Congress disposes .\nEntity: Hill",
+      "answer": "```json\n[\"/person\"]\n```"
+    },
+    {
+      "query": "Text: The Chamber of Commerce delegates participating in this lobbying campaign come from many well - known in Washington , large American companies , such as Dow Jones , AT&T , IBM , Boeing , McDonald Douglas , General Electric , Westinghouse , Ford , and the Xian Ni Lei De Group , etc .\nEntity: this lobbying campaign",
+      "answer": "```json\n[\"/other\", \"/other/event\", \"/other/event/protest\"]\n```"
+    }
+  ]
+}

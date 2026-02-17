@@ -1,0 +1,12 @@
+model:
+  model_name: "qwen7b"
+  model_path: "C:\0store\LLM\Qwen2.5-3B-Instruct"
+  encoder_name: "bert"
+  encoder_path: "C:\0store\LLM\bert-base-cased"
+
+
+
+stage:
+  pre_filter: true
+  train: true
+  test: true

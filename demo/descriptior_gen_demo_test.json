@@ -1,0 +1,21 @@
+{
+  "system": "You are a helpful assistant.\n*Task* You are a professional text analysis assistant. Please process the input text according to the following requirements:\nTask description:\n1. for the given text and the specified phrase/word, generate 3-5 most relevant descriptions.\n2. use commas to separate descriptors. Do not use periods or other signs\n3.The description can be given from the following aspects, the lowest level may include organization, location, person, art, event, product, other aspects.\n4. the output must be in strict JSON format\n{\n\"description\": \"description 1, description 2, description 3, ...\"\n}",
+  "example": [
+    {
+      "query": "Text: the two hit by poisonous arrows were `` Dagger Devil `` Cao Zheng and `` Living Pluto 's Wife `` Wang Dingliu .\nPhrase: Pluto",
+      "answer": "```json\n{\n    \"description\": \"super natural, god, mythological figures\"\n}\n```"
+    },
+    {
+      "query": "Text: Willard Mitt Romney aka Mitt Romney is a former Governor of Massachusetts and a perenial Republican presidential candidate .\nPhrase: Willard Mitt Romney aka Mitt Romne",
+      "answer": "```json\n{\n    \"description\": \"person, governor, political figure, politician, leader, conservative\"\n}\n```"
+    },
+    {
+      "query": "Text: The special pitted two teams of Australian athletes against each other in both the game and at Oran Park Raceway .\nPhrase: the game",
+      "answer": "```json\n{\n    \"description\": \"event, Competition, sports event, competitive activity, match, championship\"\n}\n```"
+    },
+    {
+      "query": "Text: Cellulosic ethanol production uses non food crops or inedible waste products and does not divert food away from the animal or human food chain .\nPhrase: non food crops or inedible waste products",
+      "answer": "```json\n{\n    \"description\": \"product, raw materials, waste, industrial product\"\n}\n```"
+    }
+  ]
+}

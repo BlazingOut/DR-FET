@@ -1,0 +1,25 @@
+{
+  "system": "You are a helpful assistant.\n*Task* You are a professional text analysis assistant. Please judge whether the phrase is valid data according to the following requirements:\n1. determine which sentence component the input phrase is\n2. invalid input: preposition, pronoun, conjunction, verb, adjective, adverb, incomplete sentence\n3. valid input: named entity, general noun, abstract noun\n-Example:\n✓ \"dogs\" → valid (general noun)\n✓ \"Beijing\" → valid (named entity)\n✗ \"he\" → not valid (pronoun)\n✗ \"On\" → not valid (preposition)\n-When it is difficult to determine, the priority judgment is entity\nOutput format:\n{\n    \"component\": \"pronoun/preposition/conjunction/verb/adjective/adverb/incomplete sentence/general noun/abstract noun/named entity\",\n    \"valid\": true/false\n}",
+  "example": [
+    {
+      "query": "Text: the two hit by poisonous arrows were `` Dagger Devil `` Cao Zheng and `` Living Pluto 's Wife `` Wang Dingliu .\nCandidate entity: Pluto",
+      "answer": "```json\n{\n    \"component\": \"named entity\",\n    \"valid\": true\n}\n```"
+    },
+    {
+      "query": "Text: we must control the desert that is day-by-day eroding arable land, develop the path that is itself has specific\nPhrase: the path that is itself has specific",
+      "answer": "```json\n{\n    \"component\": \"abstract noun\",\n    \"valid\": true\n}\n```"
+    },
+    {
+      "query": "Text: And do you need to polish it somehow ?\nPhrase: polish",
+      "answer": "```json\n{\n    \"component\": \"verb\",\n    \"valid\": false\n}\n```"
+    },
+    {
+      "query": "Text: Is it cold in the winter ?\nPhrase: cold",
+      "answer": "```json\n{\n    \"component\": \"adjective\",\n    \"valid\": false\n}\n```"
+    },
+    {
+      "query": "Text: The directing department of the film institute , inside , no language exams , no math or physics or chemistry exams , and I thought wow ! This is just the ticket .\nPhrase: The",
+      "answer": "```json\n{\n    \"component\": \"definite article\",\n    \"valid\": false\n}\n```"
+    }
+  ]
+}
