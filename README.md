@@ -1,6 +1,3 @@
-下面是一份**简洁、论文/开源友好、偏实验代码风格**的 README 示例，重点说明 **`config.yaml` 的填写方式** 和 **`main.py` 的使用流程**，不会写得过于工程化，适合配合论文代码发布。
-
----
 
 # DR-FET Codebase
 
@@ -99,4 +96,5 @@ The entire pipeline is executed via:
 ```bash
 python main.py
 ```
+
 
