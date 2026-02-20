@@ -17,8 +17,9 @@ class Llm:
             device_map="auto",
             torch_dtype=torch.bfloat16
         )
-
+        
         # 加载lora
+        self.lora_path = lora_ckpt_path
         if lora_ckpt_path is not None:
             lora_config = LoraConfig.from_pretrained(lora_ckpt_path)
             self.model = PeftModel.from_pretrained(self.model, lora_ckpt_path, config=lora_config)
@@ -77,6 +78,59 @@ class Llm:
         return gen_texts_raw
 
 
+import json
+from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
+
+
+class LlmVLLM:
+    def __init__(self, model_path: str, lora_ckpt_path=None, gpu_memory_utilization=0.8):
+        """
+        gpu_memory_utilization: 控制 vLLM 占用显存的比例，默认 0.9，
+                                如果还要跑其他程序，可以调低一点。
+        """
+        # 1. 初始化 vLLM 引擎
+        self.enable_lora = lora_ckpt_path is not None
+        self.model = LLM(
+            model=model_path,
+            enable_lora=self.enable_lora,
+            max_lora_rank=64,  # 根据你 LoRA 的实际 rank 调整，通常 64 足够
+            gpu_memory_utilization=gpu_memory_utilization,
+            trust_remote_code=True,
+            tensor_parallel_size=1  # 如果有多张 GPU，可以增加这个值实现模型并行
+        )
+
+        # 保存 LoRA 配置（如果存在）
+        self.lora_request = None
+        if self.enable_lora:
+            self.lora_request = LoRARequest("my_lora_adapter", 1, lora_ckpt_path)
+
+        print("vLLM engine built successfully!!")
+
+    def get_responses(self, prompts, max_new_tokens=128, temperature=0):
+        """
+        直接传入整个 List[str]
+        """
+        # 2. 设置采样参数 (对应之前 do_sample=False)
+        sampling_params = SamplingParams(
+            temperature=temperature,
+            max_tokens=max_new_tokens,
+            # vLLM 会自动识别模型的 stop words，通常不需要手动传 eos_token_id
+            # 如果需要强制停止，可以使用 stop=["<|im_end|>", "<|endoftext|>"]
+        )
+
+        # 3. 批量推理
+        outputs = self.model.generate(
+            prompts,
+            sampling_params,
+            lora_request=self.lora_request
+        )
+
+        # 4. 提取文本结果
+        responses = [output.outputs[0].text for output in outputs]
+        return responses
+
+
 def general_finetune_pipeline(model, tokenizer, save_path, tokenized_dataset):
     # 定义LoraConfig
     config = LoraConfig(
@@ -95,7 +149,7 @@ def general_finetune_pipeline(model, tokenizer, save_path, tokenized_dataset):
     # tokenizer.pad_token = tokenizer.eos_token
     args = TrainingArguments(
         output_dir=save_path,
-        per_device_train_batch_size=1,
+        per_device_train_batch_size=2,
         gradient_accumulation_steps=4,
         logging_steps=50,
         num_train_epochs=1,

@@ -186,6 +186,8 @@ def filter_by_candidate_tags_stage2(similar_calculate: SimilarCalculate, data_fi
 def generate_and_test_candidates(similar_calculate: SimilarCalculate, data, save_file, q=5, top_k=5):
     gp_pairs = []
     process_data = []
+    
+
     for idx, item in tqdm(enumerate(data)):
         description = item["description"]
         g_labels = item["label"]

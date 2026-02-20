@@ -14,42 +14,34 @@ def des_generate(llm, data_file, save_path, buffer_size=100, gen_mode="test"):
     # Load appropriate demonstration examples based on mode
     if gen_mode == "test":
         demo_file = "demo/descriptor_gen_demo_test.json"
-        dataset = ICLDataset(data, demo_file, llm.tokenizer, general_mode="direct")
+        dataset = ICLDataset(data, demo_file, llm.model.get_tokenizer(), general_mode="direct")
     elif gen_mode == "train":
         demo_file = "demo/descriptor_gen_demo_train.json"
-        dataset = ICLDataset(data, demo_file, llm.tokenizer, general_mode="des_train")
+        dataset = ICLDataset(data, demo_file, llm.model.get_tokenizer(), general_mode="des_train")
     else:
         raise ValueError(f"Unknown generation mode: {gen_mode}")
-
-    dataloader = DataLoader(dataset, batch_size=8, collate_fn=icl_collate_fn)
+    all_prompts = [dataset[i] for i in range(len(dataset))]
+    # dataloader = DataLoader(dataset, batch_size=8, collate_fn=icl_collate_fn)
 
     # Create buffered writer for results
     writer = SimpleTextWriter(save_path, buffer_size)
 
-    for batch in tqdm(dataloader):
-        batch_prompt = batch["prompt"]
-        responses = llm.get_response(batch_prompt)
-        data_items = batch["data"]
-
-        for res, item in zip(responses, data_items):
-            try:
-                # Extract JSON data from response
-                res_json = extract_json_data(res)
-
-                # Validate extracted JSON
-                if not isinstance(res_json, dict) or "description" not in res_json:
-                    print("Invalid response format, skipping")
-                    continue
-
-                # Create new item with generated description
-                new_item = item.copy()
-                new_item["description"] = res_json["description"]
-                writer.write(json.dumps(new_item))
-
-            except Exception as e:
-                # Handle any parsing errors
-                print(f"Error processing response: {e}")
+    responses = llm.get_responses(all_prompts, temperature=0.5)
+    for idx, res_text in enumerate(responses):
+        # Extract JSON data from response
+        res_json = extract_json_data(res_text)
+        # Validate extracted JSON
+        try:
+            if not isinstance(res_json, dict) or "description" not in res_json:
+                print("Invalid response format, skipping")
                 continue
-
-    # Finalize writing
-    writer.close()
+            # Create new item with generated description
+            new_item = data[idx].copy()
+            new_item["description"] = res_json["description"]
+            writer.write(json.dumps(new_item))
+        except Exception as e:
+            # Handle any parsing errors
+            print(f"Error processing response: {e}")
+            continue
+        
+    

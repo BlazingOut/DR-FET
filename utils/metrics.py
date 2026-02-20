@@ -97,12 +97,14 @@ def strict_acc_gp_pairs(gp_pairs):
 def compute_and_print_all_metrics(gp_pairs):
     acc = strict_acc_gp_pairs(gp_pairs)
     p, r, mif1 = micro_f1(gp_pairs)
-    _, _, macf1 = macro_f1_gptups(gp_pairs)
+    macp, macr, macf1 = macro_f1_gptups(gp_pairs)
     metircs = {
         'accuracy': acc,
         'micro_f1': mif1,
         'micro_precision': p,
         'micro_recall': r,
-        'macro_f1': macf1
+        'macro_f1': macf1,
+        'macro_precision': macp,
+        'macro_recall': macr
     }
     return metircs
